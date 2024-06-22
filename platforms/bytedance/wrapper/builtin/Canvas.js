@@ -5,8 +5,10 @@ let hasModifiedCanvasPrototype = false
 let hasInit2DContextConstructor = false
 let hasInitWebGLContextConstructor = false
 
+var first = true
 export default function Canvas() {
-  const canvas = tt.createCanvas()
+  const canvas = first && tt.__first__canvas ? tt.__first__canvas : tt.createCanvas()
+  first = false
 
   canvas.type = 'canvas'
 
