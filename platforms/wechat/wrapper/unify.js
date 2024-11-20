@@ -146,18 +146,22 @@ if (window.__globalAdapter) {
         let windowWidth = systemInfo.windowWidth;
         let windowHeight = systemInfo.windowHeight;
 
-        let { top, left, bottom, right, width, height } = systemInfo.safeArea;
-        // HACK: on iOS device, the orientation should mannually rotate
-        if (systemInfo.platform === 'ios' && !globalAdapter.isDevTool && isLandscape()) {
-            let tmpTop = top, tmpLeft = left, tmpBottom = bottom, tmpRight = right, tmpWidth = width, tmpHeight = height;
-            let bottomHeight = windowWidth - tmpBottom;
-            top = windowHeight - tmpRight;
-            left = tmpTop;
-            bottom = windowHeight - tmpLeft - bottomHeight;
-            right = tmpBottom;
-            height = tmpWidth - bottomHeight;
-            width = tmpHeight;
+        if (systemInfo.safeArea) {
+            let { top, left, bottom, right, width, height } = systemInfo.safeArea;
+            // HACK: on iOS device, the orientation should mannually rotate
+            if (systemInfo.platform === 'ios' && !globalAdapter.isDevTool && isLandscape()) {
+                let tmpTop = top, tmpLeft = left, tmpBottom = bottom, tmpRight = right, tmpWidth = width, tmpHeight = height;
+                let bottomHeight = windowWidth - tmpBottom;
+                top = windowHeight - tmpRight;
+                left = tmpTop;
+                bottom = windowHeight - tmpLeft - bottomHeight;
+                right = tmpBottom;
+                height = tmpWidth - bottomHeight;
+                width = tmpHeight;
+            }
+            return { top, left, bottom, right, width, height };
+        } else {
+            return { top: 0, left: 0, bottom: systemInfo.screenHeight, right: systemInfo.screenWidth, width: systemInfo.screenWidth, height: systemInfo.screenHeight };
         }
-        return { top, left, bottom, right, width, height };
     }
 }
